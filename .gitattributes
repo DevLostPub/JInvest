@@ -1,1 +1,2 @@
-*.rb linguist-language=Java
+*.xhtml linguist-language=Java
+src/main/webapp/* linguist-vendored
