@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/10/2017 19:15:55 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.devlost.jinvest.model.Transaction" table="transactions" catalog="dbo">
+        <id name="transactionId" type="java.lang.Long">
+            <column name="transaction_id" />
+            <generator class="sequence"></generator>
+        </id>
+        <property name="type" type="string">
+            <column name="type" length="4" />
+        </property>
+        <many-to-one name="fund" class="com.devlost.jinvest.model.Fund" fetch="select" lazy="false">
+            <column name="fund_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="userProfile" class="com.devlost.jinvest.model.UserProfile" fetch="select" lazy="false">
+            <column name="user_profile_id" not-null="true" />
+        </many-to-one>
+        <property name="ammount" type="big_decimal">
+            <column name="ammount" precision="14" not-null="true" />
+        </property>
+        <property name="submitDate" type="timestamp">
+            <column name="submit_date" length="19" not-null="true" />
+        </property>
+        <property name="settlementDate" type="date">
+            <column name="settlement_date" length="10" />
+        </property>
+        <property name="completed" type="java.lang.Byte">
+            <column name="completed" />
+        </property>
+    </class>
+</hibernate-mapping>

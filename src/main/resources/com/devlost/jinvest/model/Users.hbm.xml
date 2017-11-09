@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/10/2017 19:15:55 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.devlost.jinvest.model.Users" table="users" catalog="dbo">
+        <id name="username" type="string">
+            <column name="username" length="50" />
+            <generator class="assigned"></generator>
+        </id>
+        <property name="password" type="string">
+            <column name="password" length="50" not-null="true" />
+        </property>
+        <property name="enabled" type="boolean">
+            <column name="enabled" not-null="true" />
+        </property>
+        <set name="userProfiles" table="user_profile" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="users_id" length="50" not-null="true" />
+            </key>
+            <one-to-many class="com.devlost.jinvest.model.UserProfile" />
+        </set>
+    </class>
+</hibernate-mapping>

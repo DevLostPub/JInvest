@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/brokerTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left">
+        <ui:include src="/includes/brokerSideBar.xhtml">
+            <ui:param name="user" value="#{broker.user}"/>
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form-content">
+            <p:dataTable id="table-content" emptyMessage="Sem posição" value="#{broker.userFunds}" var="item" rows="10">
+                <p:column headerText="Fundo">
+                    <h:outputText value="#{item.fund.fundName}"/>
+                </p:column>
+                <p:column headerText="Quantidade">
+                    <h:outputText value="#{item.ammount}"/>
+                </p:column>
+                <p:column headerText="Data da Compra">
+                    <h:outputText value="#{item.settlementDate}"/>
+                </p:column>
+                <p:column headerText="Opções">
+                    <p:commandButton id="button-purchase" icon="ui-icon-cart" oncomplete="PF('dialog-purchase').show()" update=":dialog-purchase">
+                        <p:tooltip for="button-purchase" position="left" value="Aplicar"/>
+                        <f:setPropertyActionListener value="#{item.fund}" target="#{broker.selectedFund}"/>
+                    </p:commandButton>
+                    <p:commandButton id="button-sell" icon="ui-icon-suitcase">
+                        <p:tooltip for="button-sell" position="left" value="Vender"/>
+                    </p:commandButton>
+                    <p:commandButton id="button-info" icon="ui-icon-info" oncomplete="PF('dialog-info').show()" update=":info">
+                        <p:tooltip for="button-info" position="left" value="Informações"/>
+                        <f:setPropertyActionListener value="#{item.fund}" target="#{broker.selectedFund}"/>
+                    </p:commandButton>
+                </p:column>
+                <f:facet name="header">
+                    <h:outputText value="Carteira"/>
+                </f:facet>
+                <f:facet name="options">
+                    <p:button/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:button value="Aplicação" outcome="aplicacao.xhtml"/>
+
+        <p:dialog widgetVar="dialog-purchase" id="dialog-purchase">
+            <h:form id="form-purchase">
+                <p:outputPanel id="panel-purchase">
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="avaliable" value="Saldo"/>
+                        <h:outputText id="avaliable" value="#{broker.user.avaliableCash}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+
+                        <h:outputLabel for="fund-name" value="Fundo"/>
+                        <h:outputText id="fund-name" value="#{broker.selectedFund.fundName}"/>
+
+                        <h:outputLabel value="Data"/>
+                        <p:calendar />
+
+                        <h:outputLabel value="Valor"/>
+                        <p:inputNumber symbol="R$"/>
+
+                        <p:commandButton value="Aplicar" oncomplete="PF('dialog-purchase').hide()"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialog-purchase').hide()"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog header="Inforrmações do fundo" widgetVar="dialog-info" resizable="false" id="info">
+                    <ui:include src="/includes/fundInfoPanel.xhtml">
+                        <ui:param name="item" value="#{broker.selectedFund}"/>
+                    </ui:include>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

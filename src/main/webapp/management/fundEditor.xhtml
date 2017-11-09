@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata>
+        <f:viewParam name="fundo" value="#{funds.selectedId}"/> 
+        <f:viewParam name="operation" value="#{funds.operationType}"/>
+        <f:viewAction action="#{funds.fundInfo}"/>
+    </f:metadata>
+
+    <ui:define name="top">
+        <ui:include src="/includes/menuBarManagenent.xhtml"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid columns="3" cellpadding="4"> 
+                <h:outputLabel for="name" value="#{string.fund_name}:"/>
+                <p:inputText id="name" value="#{funds.selectedItem.fundName}" required="true" label="#{string.fund_name}"/>
+                <p:message for="name"/>
+
+                <h:outputLabel for="risk_select" value="#{string.fund_risk}"/>
+                <p:selectOneMenu id="risk_select" value="#{funds.selectedItem.risk.riskId}" required="true" label="#{string.fund_risk}">
+                    <f:selectItems value="#{funds.riskList}" var="item" itemLabel="#{item.name}" itemValue="#{item.riskId}"/>
+                </p:selectOneMenu>
+                <p:message for="risk_select"/>
+
+
+                <h:outputLabel for="category" value="#{string.fund_category}"/>
+                <p:selectOneMenu id="category" value="#{funds.selectedItem.category.categoryId}" required="true" label="#{string.fund_category}">
+                    <f:selectItems value="#{funds.categoryList}" var="item" itemLabel="#{item.name}" itemValue="#{item.categoryId}"/>
+                </p:selectOneMenu>
+                <p:message for="category"/>
+
+                <h:outputLabel for="total" value="#{string.fund_total} Inicial:"/>
+                <p:inputNumber id="total" value="#{funds.selectedItem.totalNetAsset}" symbol=" R$" symbolPosition="s" />
+                <p:message for="total"/>
+
+                <h:outputLabel value="#{string.fund_min_invest}"/>
+                <p:inputNumber id="min_inv" value="#{funds.selectedItem.minimumInvestment}" symbol=" R$" symbolPosition="s" />
+                <p:message for="min_inv"/>
+
+                <h:outputLabel for="min_bal" value="#{string.fund_min_balance}"/>
+                <p:inputNumber id="min_bal" value="#{funds.selectedItem.minimumBalance}" symbol=" R$" symbolPosition="s" /> 
+                <p:message for="min_bal"/>
+
+                <h:outputLabel for="min_red" value="#{string.fund_min_redeem}"/>
+                <p:inputNumber id="min_red" value="#{funds.selectedItem.minimumRedeem}" symbol=" R$" symbolPosition="s" />
+                <p:message for="min_red"/>
+
+                <h:outputLabel for="add_purchase" value="#{string.fund_min_add}"/>
+                <p:inputNumber id="add_purchase" value="#{funds.selectedItem.additionalPurchase}" symbol=" R$" symbolPosition="s" />
+                <p:message for="add_purchase"/>
+
+                <h:outputLabel for="redeem" value="#{string.fund_reddem}"/>
+                <p:inputNumber id="redeem" value="#{funds.selectedItem.redeemPeriod}" symbol="D+"  decimalPlaces="0"/>
+                <p:message for="redeem"/>
+
+                <h:outputLabel for="hold" value="#{string.fund_hold}"/>
+                <p:inputNumber id="hold" value="#{funds.selectedItem.holdPeriod}" symbol=" dia(s)" symbolPosition="s" decimalPlaces="0"/>
+                <p:message for="hold"/>
+
+                <h:outputLabel for="settle" value="#{string.fund_settle}"/>
+                <p:inputNumber id="settle" value="#{funds.selectedItem.settlePeriod}" symbol="D+"  decimalPlaces="0"/>
+                <p:message for="settle"/>
+
+                <h:outputLabel for="man_fee" value="#{string.fund_man_fee}"/>
+                <p:inputNumber id="man_fee" value="#{funds.selectedItem.managementFee}" symbol="%" symbolPosition="s"/>
+                <p:message for="man_fee"/>
+
+                <h:outputLabel for="purchase_fee" value="#{string.fund_purchase_fee}"/>
+                <p:inputNumber id="purchase_fee" value="#{funds.selectedItem.purchaseFee}" symbol="%" symbolPosition="s"/>
+                <p:message for="purchase_fee"/>
+
+                <h:outputLabel for="exit_fee" value="#{string.fund_exit_fee}"/>
+                <p:inputNumber id="exit_fee" value="#{funds.selectedItem.withdrawFee}" symbol="%" symbolPosition="s"/>
+                <p:message for="exit_fee"/>
+
+                <h:outputLabel for="perf_fee" value="#{string.fund_performance_fee}"/>
+                <p:inputNumber id="perf_fee" value="#{funds.selectedItem.performanceFee}" label="#{string.fund_performance_fee}" symbol="%" symbolPosition="s"/>
+                <p:message for="perf_fee"/>
+
+                <h:outputLabel for="start_date" value="#{string.fund_start_date}"/>
+                <p:calendar id="start_date" value="#{funds.selectedItem.startDate}" showOn="button" required="true"
+                            mask="true" pattern="dd/MM/yyyy" label="#{string.fund_start_date}" locale="pt_BR"/>                
+                <p:message for="start_date"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Salvar" actionListener="#{funds.saveItem}" validateClient="true" ajax="false" type="submit" action="fundos?faces-redirect=true"/>
+                    <p:button value="Cancelar" outcome="/management/fundos.xhtml"/>            
+                </f:facet>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

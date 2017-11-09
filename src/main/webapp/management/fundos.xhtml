@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="top">
+        <ui:include src="/includes/menuBarManagenent.xhtml"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form-content">
+            <p:dataTable id="table-content" value="#{funds.items}" var="item">
+                <f:facet name="header">
+                    Fundos Cadastrados
+                </f:facet>
+                <p:column style="width: 16px">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="#{string.fund_name}" style="align-content: flex-start">
+                    <h:outputText value="#{item.fundName}"/>
+                </p:column>
+
+                <p:column headerText="#{string.fund_total}" style="width: 196px">
+                    <p:link id="rentabilidade" outcome="/investimentos/rentabilidade.xhtml" target="_blank">
+                        <h:outputText value="#{item.totalNetAsset}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                        <f:param name="fundo" value="#{item.id}"/>
+                    </p:link>
+                    <p:tooltip for="rentabilidade" position="left" value="Ir para rentabilidade do fundo"/>
+                </p:column>
+                <p:column headerText="Opções" style="width: 200px;">
+
+                    <p:commandButton id="btn-profit" icon="ui-icon-suitcase" update=":form-manage:panel-manage" oncomplete="PF('dialog-manage').show()">
+                        <f:setPropertyActionListener value="#{item.totalNetAsset}" target="#{funds.fundTotalValue}"/>
+                        <f:setPropertyActionListener value="#{item}" target="#{funds.selectedItem}"/>
+                        <p:tooltip  for="btn-profit" position="left" value="Gerenciar rendimentos"/>
+                    </p:commandButton>
+
+                    <p:button id="btn-edit" icon="ui-icon-pencil" outcome="/management/fundEditor.xhtml">
+                        <f:param name="fundo" value="#{item.id}"/>
+                        <f:param name="operation" value="update"/>
+                        <p:tooltip for="btn-edit" position="left" value="Atualizar informações"/>
+                    </p:button>
+
+                    <p:commandButton id="btn-remove" icon="ui-icon-trash" update=":form-remove:panel-remove" oncomplete="PF('dialog-remove').show()" label="Liquidar">
+                        <f:setPropertyActionListener value="#{item}" target="#{funds.selectedItem}"/>
+                        <p:tooltip  for="btn-remove" position="left" value="Liquidar fundo"/>
+                    </p:commandButton>
+
+                    <p:commandButton id="btn-unlock" icon="ui-icon-locked" rendered="#{item.locked == true}" oncomplete="PF('dialog-status').show()" update=":form-status:panel-status">
+                        <f:setPropertyActionListener value="#{item}" target="#{funds.selectedItem}"/>
+                        <p:tooltip for="btn-unlock" position="top" value="Reabrir fundo para aplicação/resgate"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-unlocked" rendered="#{!item.locked}" id="btn-lock" oncomplete="PF('dialog-status').show()" update=":form-status:panel-status">
+                        <f:setPropertyActionListener value="#{item}" target="#{funds.selectedItem}"/>
+                        <p:tooltip for="btn-lock" position="left" value="Fechar fundo para aplicação/resgate"/>
+                    </p:commandButton>
+
+                </p:column>
+                <p:rowExpansion>
+                    <ui:include src="/includes/fundInfoPanel.xhtml"/>
+                </p:rowExpansion>
+            </p:dataTable>
+        </h:form>
+
+
+        <p:dialog widgetVar="dialog-manage" header="Gerenciar Rendimentos" resizable="false" modal="true" appendTo="@(body)">
+            <h:form id="form-manage">
+                    <p:panelGrid columns="2" id="panel-manage">
+                        <p:outputLabel for="profit-percent" value="Valor Percentual: "/>
+                        <p:inputNumber  id="profit-percent" symbol="%" symbolPosition="s" value="#{funds.fundVariation}" emptyValue="zero" decimalPlaces="2" >
+                            <p:ajax event="keyup" update="profit-real" listener="#{funds.calculateFieldFundValue}"/>
+                        </p:inputNumber>
+
+                        <p:outputLabel for="profit-real" value="Patrimonio do Fundo"/>
+                        <p:inputNumber id="profit-real" symbol="R$" symbolPosition="s" value="#{funds.fundTotalValue}" disabled="true"/>
+                    </p:panelGrid>
+                <p:commandButton value="Salvar" oncomplete="PF('dialog-manage').hide()" actionListener="#{funds.updateFundValue}" update=":form-content:table-content" />
+                    <p:commandButton value="Cancelar" onclick="PF('dialog-manage').hide()"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dialog-remove" header="Liquidar Fundo" resizable="false" modal="true" appendTo="@(body)">
+            <h:form id="form-remove" style="width: 230px">
+                <p:outputPanel id="panel-remove" >
+                    <h:outputText value="#{funds.selectedItem.id} - #{funds.selectedItem.fundName}"/>
+                    <pre/>
+                    <h:outputText value="#{string.liquidar}" style="font-style: oblique"/>
+                    <pre/>
+                    <p:commandButton value="Confirmar" actionListener="#{funds.removeItem}" onclick="PF('dialog-remove').hide()" update=":form-content:table-content"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dialog-remove').hide()"/>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dialog-status" header="Atenção!" modal="true" resizable="false" closable="false" appendTo="@(body)">
+            <h:form id="form-status" style="width: 230px">
+                <p:outputPanel id="panel-status">
+                    <h:outputText value="Alteração do status do fundo #{funds.selectedItem.id} - #{funds.selectedItem.fundName}"/>
+                    <pre/>
+                    <h:outputText rendered="#{funds.selectedItem.locked}" value="#{string.unlock_message}" style="font-style: oblique"/>
+                    <h:outputText rendered="#{!funds.selectedItem.locked}" value="#{string.lock_message}" style="font-style: oblique"/>
+                    <p:commandButton value="Confirmar" actionListener="#{funds.changeStatus}" update=":form-content:table-content" onclick="PF('dialog-status').hide()"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dialog-status').hide()"/>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:panelGrid columns="2"> 
+        <h:outputText value="#{string.fund_full_name}"/>
+        <h:outputText value="#{item.fundName}"/>
+
+        <h:outputText value="#{string.fund_risk}"/>
+        <h:outputText value="#{item.risk.name}"/>
+
+        <h:outputText value="#{string.fund_category}"/>
+        <h:outputText value="#{item.category.name}"/>
+
+        <h:outputText value="#{string.fund_min_invest}"/>
+        <h:outputText value="#{item.minimumInvestment}" >
+            <f:convertNumber type="currency"/>
+        </h:outputText>
+
+        <h:outputText value="#{string.fund_min_balance}"/>
+        <h:outputText value="#{item.minimumBalance}">
+            <f:convertNumber type="currency"/>
+        </h:outputText> 
+
+        <h:outputText value="#{string.fund_min_redeem}"/>
+        <h:outputText value="#{item.minimumRedeem}">
+            <f:convertNumber type="currency"/>
+        </h:outputText>
+
+        <h:outputText value="#{string.fund_min_add}"/>
+        <h:outputText value="#{item.additionalPurchase}"> 
+            <f:convertNumber type="currency"/>
+        </h:outputText>
+
+        <h:outputText value="#{string.fund_settle}"/>
+        <h:outputText value="D+#{item.settlePeriod}"/>
+
+        <h:outputText value="#{string.fund_reddem}"/>
+        <h:outputText value="D+#{item.redeemPeriod}"/>
+
+        <h:outputText value="#{string.fund_hold}"/>
+        <h:outputText value="#{item.holdPeriod} dias"/>
+
+        <h:outputText value="#{string.fund_man_fee}"/>
+        <h:outputText value="#{item.managementFee} (%a.a)"/>
+
+        <h:outputText value="#{string.fund_purchase_fee}"/>
+        <h:outputText value="#{item.purchaseFee}">
+            <f:convertNumber type="percent"/>
+        </h:outputText>
+
+        <h:outputText value="#{string.fund_exit_fee}"/>
+        <h:outputText value="#{item.withdrawFee}">  
+            <f:convertNumber type="percent"/>
+        </h:outputText>
+
+        <h:outputText value="#{string.fund_start_date}"/>
+        <h:outputText value="#{item.startDate}"> 
+            <f:convertDateTime locale="pt_BR"/>
+        </h:outputText>
+    </p:panelGrid>
+</ui:composition>

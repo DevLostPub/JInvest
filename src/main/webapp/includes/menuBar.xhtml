@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form>
+        <p:menubar>
+            <p:menuitem value="Inicio" outcome="/index.xhtml"/>
+            <p:submenu label="Investir">
+                <p:menuitem value="Fundos de Investimento" outcome="/investimentos/fundos.xhtml"/>
+                <p:menuitem value="Rentabilidade dos Fundos" outcome="/investimentos/rentabilidade.xhtml" disabled="true"/>
+            </p:submenu>
+            <f:facet name="options">
+                <p:button value="Login" outcome="/app/home.xhtml"/>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+</ui:composition>

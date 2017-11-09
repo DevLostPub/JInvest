@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="top">
+        <ui:include src="/includes/menuBarManagenent.xhtml"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:dataTable value="#{transactions.transactionList}" var="item" paginator="true" rows="12">
+            <p:column headerText="Ordem">
+                <h:outputText value="#{item.transactionId}#{item.type}"/>
+            </p:column>
+            <p:column headerText="Fundo">
+                <h:outputText value="#{item.fund.fundName}"/>
+            </p:column>
+            <p:column headerText="Membro">
+                <h:outputText value="#{item.userProfile.name}"/>
+            </p:column>
+            <p:column headerText="Data da Ordem">
+                <h:outputText value="#{item.submitDate}">
+                    <f:convertDateTime locale="pt_BR" type="both"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Data de Execução">
+                <h:outputText value="#{item.settlementDate}"/>
+            </p:column>
+            <p:column headerText="Valor">
+                <h:outputText value="#{item.ammount}">
+                    <f:convertNumber type="currency"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Opções" style="width: 100px">
+                <p:commandButton id="btn-execute" icon="ui-icon-check">
+                    <p:tooltip for="btn-execute" position="left" value="Executar"/>
+                </p:commandButton>
+                <p:commandButton id="btn-remove" icon="ui-icon-trash">
+                    <p:tooltip for="btn-remove" position="left" value="Remover"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+
+</ui:composition>

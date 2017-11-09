@@ -10,3 +10,7 @@ Technologies used:
 * Spring Security
 
 JInvest is mutal fund administration simulator;
+
+#SETUP
+applicationContext-security.xml: Edit the properties driverClassName, url and user/password to reflect your database setup.
+hibernate.cfg.xml: Edit the properties connection.driver_class, connection.url, dialect and user/password, the tables will be created on the first run.

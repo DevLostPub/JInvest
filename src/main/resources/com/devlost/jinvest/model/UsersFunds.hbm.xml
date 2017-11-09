@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/10/2017 19:15:55 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.devlost.jinvest.model.UsersFunds" table="users_funds" catalog="dbo">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="sequence"></generator>
+        </id>
+        <many-to-one name="fund" class="com.devlost.jinvest.model.Fund" fetch="select" lazy="false">
+            <column name="fund_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="userProfile" class="com.devlost.jinvest.model.UserProfile" fetch="select">
+            <column name="user_profile_id" not-null="true" />
+        </many-to-one>
+        <property name="ammount" type="big_decimal">
+            <column name="ammount" precision="14" />
+        </property>
+        <property name="settlementDate" type="date">
+            <column name="settlement_date" length="10" />
+        </property>
+        <property name="profit" type="big_decimal">
+            <column name="profit" precision="14"/>
+        </property>
+    </class>
+</hibernate-mapping>

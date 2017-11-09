@@ -1,0 +1,27 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+    <http pattern="/investimentos/**" security="none"/>
+    <http pattern="/index.xhtml" security="none"/>
+    <http>
+        <csrf disabled="true"/>
+        <intercept-url pattern="/management/**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/app/**" access="hasRole('USER')"/>
+        <form-login />
+        <logout logout-url="/logout.xhtml" logout-success-url="/index.xhtml"/>
+    </http>
+    <b:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <b:property name="driverClassName" value="{your_driver}" />
+        <b:property name="url" value="{database_connection_string}"/>
+        <b:property name="username" value="{username}" />
+        <b:property name="password" value="{password}"/>
+    </b:bean>
+    
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"/>
+        </authentication-provider>
+    </authentication-manager>
+</b:beans>

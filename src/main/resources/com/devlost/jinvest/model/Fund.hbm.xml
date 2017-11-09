@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/10/2017 19:15:55 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.devlost.jinvest.model.Fund" table="fund" catalog="dbo">
+        <id name="id" type="long">
+            <column name="id" />
+            <generator class="sequence"></generator>
+        </id>
+        <many-to-one name="category" class="com.devlost.jinvest.model.Category" fetch="select" lazy="false">
+            <column name="category_id" />
+        </many-to-one>
+        <many-to-one name="risk" class="com.devlost.jinvest.model.Risk" fetch="select" lazy="false">
+            <column name="risk_id" />
+        </many-to-one>
+        <property name="additionalPurchase" type="big_decimal">
+            <column name="additional_purchase" precision="14" />
+        </property>
+        <property name="fundName" type="string">
+            <column name="fund_name" not-null="true" />
+        </property>
+        <property name="holdPeriod" type="java.lang.Integer">
+            <column name="hold_period" />
+        </property>
+        <property name="managementFee" type="big_decimal">
+            <column name="management_fee" precision="14" />
+        </property>
+        <property name="minimumBalance" type="big_decimal">
+            <column name="minimum_balance" precision="14" />
+        </property>
+        <property name="minimumInvestment" type="big_decimal">
+            <column name="minimum_investment" precision="14" />
+        </property>
+        <property name="minimumRedeem" type="big_decimal">
+            <column name="minimum_redemm" precision="14" />
+        </property>
+        <property name="performanceFee" type="java.lang.Long">
+            <column name="performance_fee" precision="10" scale="0" />
+        </property>
+        <property name="purchaseFee" type="java.lang.Long">
+            <column name="purchase_fee" precision="10" scale="0" />
+        </property>
+        <property name="redeemPeriod" type="java.lang.Integer">
+            <column name="redeem_period" />
+        </property>
+        <property name="settlePeriod" type="java.lang.Integer">
+            <column name="settle_period" />
+        </property>
+        <property name="sharePrice" type="big_decimal">
+            <column name="share_price" precision="14" />
+        </property>
+        <property name="startDate" type="date">
+            <column name="start_date" length="10" />
+        </property>
+        <property name="totalNetAsset" type="big_decimal">
+            <column name="total_net_asset" precision="14" />
+        </property>
+        <property name="withdrawFee" type="java.lang.Long">
+            <column name="withdraw_fee" precision="10" scale="0" />
+        </property>
+        <property name="locked" type="java.lang.Boolean">
+            <column name="locked" default="false"/>
+        </property>
+    </class>
+</hibernate-mapping>

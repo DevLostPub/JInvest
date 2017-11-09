@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/brokerTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left">
+        <ui:include src="/includes/brokerSideBar.xhtml">
+            <ui:param name="user" value="#{broker.user}"/>
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form-content">
+            <p:dataTable id="table-content" value="#{broker.fundList}" var="item" rows="20">
+                <p:column headerText="Nome">
+                    <h:outputText value="#{item.fundName}"/>
+                </p:column>
+                <p:column headerText="Investimento Minimo">
+                    <h:outputText value="#{item.minimumInvestment}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Opções" style="width: 86px">
+                    <p:commandButton icon="ui-icon-info" oncomplete="PF('dialog-info').show()" update=":dialog-info">
+                        <f:setPropertyActionListener value="#{item}" target="#{broker.selectedFund}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-cart" oncomplete="PF('dialog-purchase').show()" update=":dialog-purchase" actionListener="#{broker.prepareNewTransaction}">
+                        <f:setPropertyActionListener value="#{item}" target="#{broker.selectedFund}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Inforrmações do fundo" widgetVar="dialog-info" id="dialog-info" resizable="false">
+                   <ui:include src="/includes/fundInfoPanel.xhtml">
+                        <ui:param name="item" value="#{broker.selectedFund}"/>
+                    </ui:include>
+        </p:dialog>
+        <p:dialog header="Comprar" widgetVar="dialog-purchase" id="dialog-purchase" resizable="false" modal="true" appendTo="@(body)" draggable="false">
+            <h:form id="form-purchase">
+                <p:outputPanel id="panel-purchase">
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="avaliable" value="Saldo"/>
+                        <h:outputText id="avaliable" value="#{broker.user.avaliableCash}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                        
+                        <h:outputLabel for="fund-name" value="Fundo"/>
+                        <h:outputText id="fund-name" value="#{broker.selectedFund.fundName}"/>
+                        
+                        <h:outputLabel value="Data"/>
+                        <p:calendar value="#{broker.selectedTransaction.submitDate}"/>
+                        
+                        <h:outputLabel value="Valor"/>
+                        <p:inputNumber symbol="R$" value="#{broker.selectedTransaction.ammount}"/>
+                        
+                        <p:commandButton value="Aplicar" oncomplete="PF('dialog-purchase').hide()" actionListener="#{broker.addTransaction('BUY')}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialog-purchase').hide()"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>
